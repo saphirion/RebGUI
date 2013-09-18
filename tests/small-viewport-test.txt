@@ -1,0 +1,138 @@
+#[object! [
+    frame: #[none]
+    points: [
+        line 1 0.255.0 [9325.06506579935 7500.0 28000.0 22519.9501041764] 
+        line 1 0.0.255 [7500.0 7500.0 28000.0 28000.0] 
+        line 1 255.0.0 [7500.0 8540.2246334803 24589.5171394831 28000.0] 
+        point 4 blue [[price base 3] 14131.3976249733 15000.0 [price base 4] 13379.9047997323 27000.0 [price base 5] 11356.8200298049 7500.0 [price base 6] 10752.8763154996 28000.0 [price base 7] 9639.63220365809 7800.0] 
+        visible-points [[price base 3] [price base 4] [price base 5] [price base 6] [price base 7]] 
+        points-colors []
+    ]
+    settings: [
+        graph xyplot 
+        grid 10x10 0.0.0.128 
+        hilite-points 
+        shadows 
+        graph-pan 
+        tool-tip-coords 
+        cross-hair 
+        cross-hair-color red 
+        x-label "Should-Cost" 
+        y-label "Actual Price" 
+        point-over-color cyan 
+        point-select-color 0.160.0 
+        graph-zoom 
+        x-min -100 
+        x-max 100 
+        y-min -80 
+        y-max 60 
+        quadratic-ratio 
+        data graph-points 
+        point-action [
+            use [marker] [
+                disable-show _gui 
+                i-graph/select-point 'all false 
+                ctx-search/clear-search 
+                foreach [point-pos point-id point-data] matched-point [
+                    log rejoin ["Matched point in graph: " point-id] 
+                    append-graph-point point-id
+                ] 
+                foreach [point-pos point-id point-data] adjacent-points [
+                    log rejoin ["Adjacent point in graph: " point-id] 
+                    append-graph-point point-id
+                ] 
+                set-marker 
+                select-set-products copy head ctx-search/search-result 
+                set-render-g-set-data g-set-data 
+                make-undo "Select Graph Points" none 
+                make-dirty [g-set-potentials g-set-data l-set-data] 
+                g-set-data/go-to index? find extract g-set-data/data g-set-data/all-cols ctx-search/search-result/1 
+                update-faces 
+                finish-undo
+            ]
+        ] 
+        pan-action [
+            either roaming-frame [
+                roaming-frame: i-graph/get-viewport-xy 
+                set-undo 'roam 
+                make-undo "Roam Graph Pan" coordinate-list roaming-frame config-decimals
+            ] [
+                set in graph* 'frame i-graph/get-viewport-xy 
+                set-undo 'graphs 
+                make-undo "Set Graph Pan" coordinate-list *graph frame config-decimals
+            ] 
+            show-window graph-views-layout 
+            show-window command-history-layout 
+            finish-undo
+        ] 
+        mouse-wheel-action [
+            use [frame] [
+                frame: zoom any [roaming-frame *graph frame] pick [0.9 1.1] negative? event/offset/y 
+                either roaming-frame [
+                    roaming-frame: frame 
+                    set-undo 'roam 
+                    make-undo "Roam Graph Zoom" coordinate-list roaming-frame config-decimals
+                ] [
+                    set in graph* 'frame frame 
+                    set-undo 'graphs 
+                    make-undo "Set Graph Zoom" coordinate-list *graph frame config-decimals
+                ] 
+                i-graph/set-viewport-xy *graph frame 
+                show-window graph-views-layout 
+                show-window command-history-layout 
+                finish-undo
+            ]
+        ] 
+        tool-tip-action [
+            use [abs-pot cost other-points max-overlap overlap overlaps row result] [
+                overlap: make block! 100 
+                max-overlap: 30 
+                result: make block! [space 0x0] 
+                foreach [point-pos point-id point-data] matched-point [
+                    cost: get-costs point-id/3 
+                    row: index? find sort extract g-set-data/data g-set-data/all-cols point-id/3 
+                    abs-pot: pick *nlpp absolute-potential row 
+                    if number? abs-pot [abs-pot: list-value abs-pot] 
+                    append result compose [
+                        text 28 (join texts/id #":") text (form id: point-id/3) return 
+                        text 28 (join texts/product-type #":") text (select texts point-id/2) return 
+                        text 28 (join texts/price-type #":") text (select texts point-id/1) return 
+                        text 28 (join texts/price #":") text (list-value point-data/2) return 
+                        text 28 (join texts/audit #":") text (either word? cost/10 [select texts cost/10] [list-value cost/10]) return 
+                        text 28 (join texts/best-cost #":") text (list-value cost/7) return 
+                        text 28 (join texts/should-cost #":") text (list-value cost/4) return 
+                        text 28 (join texts/worst-cost #":") text (list-value cost/1) return 
+                        text 28 (join texts/absolute-potential #":") text (form abs-pot) return 
+                        text 28 (join texts/price-performance #":") text (list-value/pct point-data/1 / point-data/2) return
+                    ] 
+                    unless empty? *settings id-columns [
+                        append result compose/only [
+                            text 28 (join texts/other #":") panel data (make-id-panel id)
+                        ]
+                    ]
+                ] 
+                foreach [point-pos point-id point-data] adjacent-points [
+                    append overlap point-id/3
+                ] 
+                return either empty? matched-point [
+                    translate "No Point"
+                ] [
+                    either empty? adjacent-points [
+                        result
+                    ] [
+                        overlaps: make string! 1000 
+                        repeat i length? overlap [
+                            repend overlaps [overlap/:i ", "] 
+                            if all [i < length? overlap zero? i // 5] [append overlaps newline]
+                        ] 
+                        clear skip tail overlaps -2 
+                        other-points: 
+                        substitute 
+                        translate "<points> adjacent <point>:" [points: length? overlap point: either 1 = length? overlap ["point"] ["points"]] 
+                        append result compose [return text 28 (other-points) text (overlaps)]
+                    ]
+                ]
+            ]
+        ]
+    ]
+]]

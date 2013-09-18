@@ -1,0 +1,117 @@
+#[object! [
+    frame: [-9.5975330157613 -6.67 117.268279712484 81.89]
+    points: [
+        line 1 0.255.0 [0.974618044925788 0.652866580455282 143.922981162968 96.4095678814888] 
+        line 1 0.0.255 [0.652866580455282 0.652866580455282 143.922981162968 143.922981162968] 
+        line 1 255.0.0 [0.652866580455282 0.880655237899435 106.696128651797 143.922981162968] 
+        point 4 blue [[price base 1] 2.83069061111681 2.11 [price base 2] 3.66926837726915 2.94 [price base 3] 2.53612018380271 4.53 [price base 4] 2.53612018380271 5.97 [price base 5] 1.08014704105998 0.76 [price base 6] 3.68284446592243 11.75 [price base 7] 2.29610444789888 3.09 [price base 8] 2.88078554822451 2.79 [price base 9] 2.05336954228601 2.71 [price base 10] 2.05336954228601 2.6 [price base 11] 7.63823337071047 16.08 [price base 12] 13.5359880684501 23.16 [price base 13] 2.88966510190671 9.79 [price base 14] 7.73034810316662 17.1 [price base 15] 5.13334820765793 19.57 [price base 16] 7.94745909574068 13.19 [price base 17] 5.8600321612454 7.83 [price base 18] 10.0793419772739 9.01 [price base 19] 3.59770329911552 2.45 [price base 20] 3.59770329911552 2.45 [price base 21] 3.59770329911552 2.41 [price base 22] 3.59770329911552 2.41 [price base 23] 7.59603702877107 5.67 [price base 24] 7.59603702877107 5.58 [price base 25] 2.60093688789395 3.62 [price base 26] 1.63309788985824 1.02 [price base 27] 2.53612018380271 1.72 [price base 28] 2.53612018380271 1.67 [price base 29] 2.24785976875852 1.2 [price base 30] 2.24785976875852 1.2 [price base 31] 2.35547627607275 8.85 [price base 32] 1.83799178855291 1.56 [price base 33] 2.837668577596 2.16 [price base 34] 2.02014816768313 0.99 [price base 35] 2.02014816768313 1.02 [price base 36] 2.88966510190671 2.67 [price base 37] 18.4599560290513 17.87 [price base 38] 18.4599560290513 17.97 [price base 39] 1.92068749615153 22.42 [price base 40] 1.6351095346514 0.99 [price base 41] 1.6351095346514 0.99 [price base 42] 2.53612018380271 1.57 [price base 43] 2.53612018380271 1.57 [price base 44] 3.2753144706776 2.95 [price base 45] 3.2753144706776 3.68 [price base 46] 3.2753144706776 3.79 [price base 47] 3.2753144706776 3.79 [price base 48] 93.6968953931348 74.51 [price base 49] 7.40434904891376 10.2 [price base 50] 7.40434904891376 7.44 [price base 51] 7.40434904891376 7.44 [price base 52] 106.696128651797 27.83 [price base 53] 7.59603702877107 4.64 [price base 54] 4.76799529696803 5.84 [price base 55] 39.6269182397256 30.0 [price base 56] 89.1948679599386 45.95 [price base 57] 3.30162786132781 1.75 [price base 58] 2.53612018380271 1.85 [price base 59] 3.32405808566463 5.84 [price base 60] 3.32405808566463 5.66 [price base 61] 3.32405808566463 5.66 [price base 62] 3.32405808566463 5.75 [price base 63] 3.2753144706776 3.8 [price base 64] 4.11820443665002 4.51 [price base 65] 4.11820443665002 4.34 [price base 66] 4.74749593585394 5.69 [price base 67] 2.53612018380271 1.74 [price base 68] 2.53612018380271 1.72 [price base 69] 2.53612018380271 1.72 [price base 70] 2.88078554822451 2.57 [price base 71] 2.88078554822451 3.3 [price base 72] 2.88078554822451 2.44 [price base 73] 2.24785976875852 1.2 [price base 74] 2.24785976875852 1.2 [price base 75] 2.24785976875852 1.18 [price base 76] 2.24785976875852 1.18 [price base 77] 1.08014704105998 0.73 [price base 78] 2.59214667628301 3.86 [price base 79] 3.34046662931429 5.24 [price base 80] 7.68291244910308 10.06 [price base 81] 2.5314414114833 1.62 [price base 82] 2.88078554822451 2.24 [price base 83] 3.66926837726915 2.87 [price base 84] 4.10049876484656 3.11 [price base 85] 4.74749593585394 5.07 [price base 86] 5.53221873311991 6.3 [price base 87] 4.53750196352684 3.44 [price base 88] 5.83483773299377 3.5 [price base 89] 7.59603702877107 6.82 [price base 90] 3.31078550995494 4.44 [price base 91] 2.02014816768313 1.0 [price base 92] 2.02014816768313 0.99 [price base 93] 2.02014816768313 1.01 [price base 94] 2.02014816768313 1.01 [price base 95] 1.63309788985824 0.91 [price base 96] 1.64216982522664 1.14 [price base 97] 1.64216982522664 1.1 [price base 98] 3.68284446592243 3.61 [price base 99] 3.68284446592243 3.61 [price base 100] 3.68284446592243 3.5 [price base 101] 1.83742621579344 1.44 [price base 102] 1.83742621579344 1.44 [price base 103] 1.83742621579344 1.44 [price base 104] 3.2753144706776 6.3 [price base 105] 1.32631318328134 0.71 [price base 106] 1.46811435565918 0.96 [price base 107] 4.37695672756501 8.56 [price base 108] 2.05336954228601 2.5 [price base 109] 2.29610444789888 2.35 [price base 110] 3.59770329911552 2.58 [price base 111] 3.59770329911552 2.55 [price base 112] 3.2753144706776 2.83 [price base 113] 3.2753144706776 2.83 [price base 114] 3.2753144706776 3.07 [price base 115] 2.60093688789395 3.68 [price base 116] 2.60093688789395 3.73 [price base 117] 2.58020788048843 3.1 [price base 118] 2.58020788048843 3.1 [price base 119] 2.58020788048843 3.26 [price base 120] 2.58020788048843 3.1 [price base 121] 13.5359880684501 10.76 [price base 122] 1.64216982522664 1.12 [price base 123] 1.64216982522664 3.35 [price base 124] 1.64216982522664 1.15 [price base 125] 1.64216982522664 1.1 [price base 126] 0.974618044925788 0.73 [price base 127] 4.5542904680971 3.69 [price base 128] 5.56295046763649 6.95 [price base 129] 5.56295046763649 7.06 [price base 130] 4.37695672756501 9.66 [price base 131] 4.11820443665002 4.39 [price base 132] 4.11820443665002 4.58 [price base 133] 0.977020586560256 2.05 [price base 134] 3.68284446592243 4.01 [price base 135] 3.68284446592243 3.55 [price base 136] 3.68284446592243 3.61 [price base 137] 0.976419396483799 0.81 [price base 138] 1.09016599308431 1.57 [price base 139] 9.10525664951806 34.45 [price base 140] 2.57227924738458 2.69 [price base 141] 2.57227924738458 2.69 [price base 142] 4.3021682029385 7.08 [price base 143] 4.34474660878977 7.05 [price base 144] 6.51847170034717 6.72 [price base 145] 14.0277424175733 11.96 [price base 146] 19.0132043178045 20.48 [price base 147] 18.2340998516425 9.62 [price base 148] 16.0325295348289 16.46 [price base 149] 5.8600321612454 4.42 [price base 150] 1.19783949699511 0.8 [price base 151] 2.88966510190671 3.61 [price base 152] 2.88966510190671 2.47 [price base 153] 4.76799529696803 6.22 [price base 154] 4.76799529696803 6.22 [price base 155] 4.76799529696803 5.93 [price base 156] 2.26313102312414 1.5 [price base 157] 5.83483773299377 5.24 [price base 158] 5.8600321612454 5.0 [price base 159] 5.8600321612454 5.05 [price base 160] 2.04958137458114 2.34 [price base 161] 2.60093688789395 5.69 [price base 162] 3.26324066195916 52.0] 
+        visible-points [[price base 1] [price base 2] [price base 3] [price base 4] [price base 5] [price base 6] [price base 7] [price base 8] [price base 9] [price base 10] [price base 11] [price base 12] [price base 13] [price base 14] [price base 15] [price base 16] [price base 17] [price base 18] [price base 19] [price base 20] [price base 21] [price base 22] [price base 23] [price base 24] [price base 25] [price base 26] [price base 27] [price base 28] [price base 29] [price base 30] [price base 31] [price base 32] [price base 33] [price base 34] [price base 35] [price base 36] [price base 37] [price base 38] [price base 39] [price base 40] [price base 41] [price base 42] [price base 43] [price base 44] [price base 45] [price base 46] [price base 47] [price base 48] [price base 49] [price base 50] [price base 51] [price base 52] [price base 53] [price base 54] [price base 55] [price base 56] [price base 57] [price base 58] [price base 59] [price base 60] [price base 61] [price base 62] [price base 63] [price base 64] [price base 65] [price base 66] [price base 67] [price base 68] [price base 69] [price base 70] [price base 71] [price base 72] [price base 73] [price base 74] [price base 75] [price base 76] [price base 77] [price base 78] [price base 79] [price base 80] [price base 81] [price base 82] [price base 83] [price base 84] [price base 85] [price base 86] [price base 87] [price base 88] [price base 89] [price base 90] [price base 91] [price base 92] [price base 93] [price base 94] [price base 95] [price base 96] [price base 97] [price base 98] [price base 99] [price base 100] [price base 101] [price base 102] [price base 103] [price base 104] [price base 105] [price base 106] [price base 107] [price base 108] [price base 109] [price base 110] [price base 111] [price base 112] [price base 113] [price base 114] [price base 115] [price base 116] [price base 117] [price base 118] [price base 119] [price base 120] [price base 121] [price base 122] [price base 123] [price base 124] [price base 125] [price base 126] [price base 127] [price base 128] [price base 129] [price base 130] [price base 131] [price base 132] [price base 133] [price base 134] [price base 135] [price base 136] [price base 137] [price base 138] [price base 139] [price base 140] [price base 141] [price base 142] [price base 143] [price base 144] [price base 145] [price base 146] [price base 147] [price base 148] [price base 149] [price base 150] [price base 151] [price base 152] [price base 153] [price base 154] [price base 155] [price base 156] [price base 157] [price base 158] [price base 159] [price base 160] [price base 161] [price base 162]] 
+        points-colors []
+    ]
+    settings: [
+        graph xyplot 
+        grid 10x10 0.0.0.128 
+        hilite-points 
+        shadows 
+        graph-pan 
+        tool-tip-coords 
+        cross-hair 
+        cross-hair-color red 
+        x-label "Should-Cost" 
+        y-label "Actual Price" 
+        point-over-color cyan 
+        point-select-color 0.160.0 
+        graph-zoom 
+        x-min -100 
+        x-max 100 
+        y-min -80 
+        y-max 60 
+        quadratic-ratio 
+        data graph-points 
+        point-action [
+            use [marker] [
+                disable-show _gui 
+                i-graph/select-point 'all false 
+                ctx-search/clear-search 
+                foreach [point-pos point-id point-data] matched-point [
+                    log rejoin ["Matched point in graph: " point-id] 
+                    append-graph-point point-id
+                ] 
+                foreach [point-pos point-id point-data] adjacent-points [
+                    log rejoin ["Adjacent point in graph: " point-id] 
+                    append-graph-point point-id
+                ] 
+                set-set-marker g-set-data/data marker: ctx-search/search-result/1 
+                select-base-rows g-set-data ctx-search/search-result 
+                set-render-g-set-data g-set-data 
+                if marker [g-set-data/go-to index? find extract g-set-data/data g-set-data/all-cols marker] 
+                make-undo "Select Graph Points" none 
+                make-dirty [g-set-potentials l-set-data] 
+                update-faces 
+                finish-undo
+            ]
+        ] 
+        zoom-action [
+            set in graph* 'frame i-graph/get-viewport-xy 
+            set-undo 'graphs 
+            make-undo "Set Graph Zoom" coordinate-list *graph frame config-decimals 
+            show-window graph-views-layout 
+            show-window command-history-layout 
+            finish-undo
+        ] 
+        pan-action [
+            set in graph* 'frame i-graph/get-viewport-xy 
+            set-undo 'graphs 
+            make-undo "Set Graph Pan" coordinate-list *graph frame config-decimals 
+            show-window graph-views-layout 
+            show-window command-history-layout 
+            finish-undo
+        ] 
+        tool-tip-action [
+            use [abs-pot cost other-points max-overlap overlap overlaps row result] [
+                overlap: make block! 100 
+                max-overlap: 30 
+                result: make block! [space 0x0] 
+                foreach [point-pos point-id point-data] matched-point [
+                    cost: get-costs point-id/3 
+                    row: index? find sort extract g-set-data/data g-set-data/all-cols point-id/3 
+                    abs-pot: pick *nlpp absolute-potential row 
+                    if number? abs-pot [abs-pot: list-value abs-pot] 
+                    append result compose [
+                        text 28 "ID:" text (form id: point-id/3) return 
+                        text 28 "Product Type:" text (select texts point-id/2) return 
+                        text 28 "Price Type:" text (select texts point-id/1) return 
+                        text 28 "Price:" text (list-value point-data/2) return 
+                        text 28 "Audit:" text (list-value cost/10) return 
+                        text 28 "Best-Cost:" text (list-value cost/7) return 
+                        text 28 "Should-Cost:" text (list-value cost/4) return 
+                        text 28 "Worst-Cost:" text (list-value cost/1) return 
+                        text 28 "Absolute Potential:" text (form abs-pot) return 
+                        text 28 "Price-Performance:" text (list-value/pct point-data/1 / point-data/2)
+                    ]
+                ] 
+                foreach [point-pos point-id point-data] adjacent-points [
+                    append overlap point-id/3
+                ] 
+                return either empty? matched-point [
+                    translate "No Point"
+                ] [
+                    either empty? adjacent-points [
+                        result
+                    ] [
+                        overlaps: make string! 1000 
+                        repeat i length? overlap [
+                            repend overlaps [overlap/:i ", "] 
+                            if all [i < length? overlap zero? i // 5] [append overlaps newline]
+                        ] 
+                        clear skip tail overlaps -2 
+                        other-points: 
+                        substitute 
+                        translate "<points> adjacent <point>:" [points: length? overlap point: either 1 = length? overlap ["point"] ["points"]] 
+                        append result compose [return text 28 (other-points) text (overlaps)]
+                    ]
+                ]
+            ]
+        ]
+    ]
+]]

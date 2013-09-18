@@ -1,0 +1,1322 @@
+Please put all RebGUI fixes/request features in this file:
+
+Please take a look at the TRAC entries for RebGUI as well: http://trac.geekisp.com/rebgui/report/1
+
+===Notes.
+: SHOW - SHOW calls the I18N system, so don't use ~TANSLATE string!~ in any call-chain that will call SHOW at one point. Otherwise the translation is done two-times and no effect can be seen.
+: field - If a field is preset with a TEXT use #L to avoid that the I18N system jumps in, which would double translate the string.
+
+NOT REPRO*tree-view: The first level of nodes has a big offset to the right and is not drawn at the left border.
+	Cyphre: Can you give me some example?
+NOT REPRO*tree-view: Looks like the widget is not I18N compatible
+	Cyphre: Can you give me some example?
+
+FIXED*chart: pie/torus: If there are several entries in graph/data but only 1 has a deciamal value > 0 the torus is not drawn as one 100% segment. I have tried to path the code but this didn't helped. The problem is 1st that the condition for arch-360? assumes that graph/data will only contain 1 entry in this case and doesn't take into account possible 0-valued entries.
+
+
+===OPEN
+*xy-plot: If I have zoomed the graph and select a point from the table, the zoom viewport should move to the point.
+*table: horizontal scrolling: if the slider is moved to the right, not all columns are shown
+*table: last column being pushed outside the boundary for very wide tables: it seems only to happen when a vertical scroller is present. it seems to be merely because the last column happens to be very narrow in that table.
+*table: column widths are not stored when scrolling sideways
+*grid: add a way to change a header (text, color) SET-CELL doesn't work because header row has index 0. SET-CELL should work with headers as well.
+*grid: add a way to specify the width of the label "column" At the moment the size is derived from the title (my guess). If languages are changed no adjustment of necessary width is done. Hence we specify a fixed width.
+*bar-chart: The scale of bar-chart is negative. See bar-chart6.png. This is the data of the chart:
+	1               string!   : [15 1/15]  "01. Granulat pu"
+	2               tuple!    : 0.102.76
+	3               block!    : [
+	3/1             decimal!  :     7.73
+	3               block!    : ]
+	4               string!   : [15 1/15]  "03. Extrudieren"
+	5               tuple!    : 232.241.239
+	6               block!    : [
+	6/1             decimal!  :     15.78
+	6               block!    : ]
+	7               string!   : [15 1/15]  "05. Ausmuffen, "
+	8               tuple!    : 229.201.115
+	9               block!    : [
+	9/1             decimal!  :     5.69
+	9               block!    : ]
+*drop-list: Looks like the drop-list is loosing the focus if I type a string and the drop-down list is shown and dynamically filtered
+	country/editable?: 			true
+	country/auto-fill?: 		'filter-list
+	country/popup-mode: 		'outside
+	country/lines: 					10
+	country/droplist-mode:	'downward
+	country/redraw
+*chart/torus: The % calculation gives a wrong value for the first calculated value. Example values:
+	[58 36 41 53 39 11 20 59 93]
+	100% = 410
+
+	> 58 / 410
+	ans = 0,14146
+
+	The chart shows 14.19% and not 14.14%
+*chart: A way to specify that axis labels should be hidden if the chart data is empty
+*chart: If grid 14x6 is used but the values are in the range of 38 < x < 39 the vertical scale goes from 38 to 44 (38+6). For such cases a better heuristic is needed that will adopt to senseful scaling.
+*chart: add BOTH option to SHOW-VALUES-AS. In this case the %-value is shown and the absolut value in () behind.
+*chart: If a value is 1.60 it's displayed as 1.6 A precision option is needed and an option if trailing 0s should be shown or not.
+*table: A way to specify a on-demand expansion of the shown rows if the user focus the table. Like done by drop-tree. Example: In non-focused mode we show 4 lines, in focused mode we show 10 lines. There should be a alpha value how opqaue the extended table should be.
+*chart: A way to give a set of datavalues and a way to show them as cycled animation (animation features: turn on/off, step-by-step), animation should interpolate from one data-set to the next usinga smooth animation
+*I18N: using COMMENT #L {..} on multiline comments doesn't strip the string, it will be treated as a string to be I18Nize.
+*table: A feature like windows uses it for columns that have more text than can be shown, to show all text in a tooltip after some hoovering time
+*table: If a vertical scoller is shown, and the header of the last column is set to RIGHT The text is written over the slider space. Offset the header text to end over the column not the slider.
+*table: add a feature to specify if where the horizontal slider should be placed by default. Like: "start-column 3" which displays column 3 as the left most column
+*tables: The scrolling speed is sometimes to fast for my users :-)) We need something like a DELAY or SCROLL-SPEED property.
+*xy-plot: x/y-precision can only be integer! not number! hence no 0.1 is possible.
+*xy-plot: The X-SCALE directive works strange. Specifying 8 in the below example will show much more slices (until 2010). Why this?
+        x-min 1996
+        x-max 2010
+        x-precision 1
+        ; x-grid 10
+        x-scale 8			; how many slices do we want?
+        x-axis
+*grid: A way to reset the different parts of the grid like:
+	query-grid/reset [
+		header
+		visible-columns
+		visible-rows
+		row-spec
+		content
+	]
+*grid: insert-row doesn't check if DATA contains as much elements as columns. Should we? If not either error, or extend DATA with NONE entries to fit data layout requirements so that SET-CELL will not fail
+*grid: The header and columns width don't match see screenshot grid1.png
+*grid: Is grid I18N aware?
+*grid: headers are not shown if no content is available. Heades should always be shown.
+*grid: Does set-data reset the whole grid state if an empty block is provided? If not we should either add it or an extra function grid/reset
+*grid: /set-data requires a /redraw call at the moment. Make this call implicitly inside /set-data?
+*grid: editing a cell by double-clicking, enters the edit mode but backspace is not working
+*grid: resizing only shifts the v-scroller but not the columns (or shows up a h-scroller like table does)
+*grid: If the grid has the focus, the frame is drawn in orange. This is not the case for any other widget. Either we do it for all (using a color reference) or we remove it for grid
+*grid: I need to start with an empty grid. No columns, no rows.
+*field: Can we integrate Hendrik's field code? http://hmkdesign.dk/rebol/vid/docs/vid-field.html
+*I18N: using #include between #L-BEGIN / #L-END results that strings of the included file still get collected. I'm not sure if this is good or not. IMO both options collect/don't-collect sometimes make sense.
+*I18N: Using #L-BEGING / #L-END around an #include seems not to work
+*drop-tree: After a fist access the DATA part contains random ON words. Just starting MVD, check dt/data with anamonitor, select an entry in dt and check again dt/data
+*I18N: If #LB is used, the tag must appear exactly in front of a block. It's not possible to write "#LB rejoin [.." #LB should skip the NEXT block coming, whenever this is.
+*I18N: general : Does it make sense to have user-interactive things like FIELD, AREA I18N aware?
+*I18N: area is I18N aware, but when tpying in text the LOC part is not kept in sync, resulting that the old text is displayed
+*chart/bar: the legend is screwed up for bigger numbers (see bar-chart5.png screenshot)
+*chart/bar horizontal: Regression see fixed stuff below:
+	tmp: make object! [
+	    code: 400
+	    type: 'math
+	    id: 'zero-divide
+	    arg1: none
+	    arg2: none
+	    arg3: none
+	    near: [100 / sums/:idx2]
+	    where: 'rejoin
+	]
+*chart/bar horizontal: If a bar has value 0.0 the number is written on the left side of the axis, should be right side as every other number
+*chart/pie: If the DATA series contains negative numbers the pie chart is screwed up. Run test-chart.r to see the effect.
+*I8N:
+	- a way to specify source & destination directories. Because the LOCALIZATION call needs to maintain the origianl file hierarchy structure. Otherwise #include etc. won't work. Idea rename: loc-parser/prefs/sources-loc to loc-parser/prefs/destinaiton-loc
+	- a way to specify files to skip for localization in PREFS
+	- add flags for changed (C), new (N), deleted (D) entries in the CSV export file (in a seperate column FLAG)
+	- If I add files from more than on directory by using the "load sources" button more than once, only the last selected source(s) are kept. The system should just collect all source files.
+	- Can we store the used directories / selected files as PREF. I want to specify my source dirs and the files to skip, than the system should just use all files found in the directories
+	#  - Use Ladislavs INCLUDE to be able to handle pre-processing directives
+	ok - Save last selected directory/source file as PREF
+	- Way to specify input/output directory for source code to automate localization step (keeping track if sub-directories as well)
+	- A way to specify hand-made IDs that are not touched by the system (for those cases where the automation doesn't work)
+	- a way to specify strings not allowed to ID-tify by the parser, like database names etc. Do you have an idea how we can mark such strings in the source code? The exception strings must be specified with a context to make the referencing clear. Examples:
+		- I use a word table: in contexts to reference the database name. And it seems, as it matches a widget name, the parser catches this one
+		- When using Tables the data block can contain strings that should be localized. At the moment I see an ID in the table but not the localized text.
+	- localization of the drop-tree results that the IDs are shown on the drop-tree line and not the localized text
+	- some headings for tables are not catched that are set using SET-COLUMNS
+	- I use dynamic label texts (to show different currencies) see set-currency function. Can those strings be extracted as well?
+	- radio-group is missed by the parser
+	- how to handle labes in a chart?
+	- RESET-ACTION: need to take into account face/loc/text as well. I have changed FIELD. Is this always the case? So just setting TEXT doesn't work anymore, is it necessary to take care of LOC/TEXT as well?
+	- What happens if an app doesn't use the LOC stuff at all? Is it fully transparent? I think we need to adapt SHOW-TEXT and the app has to always use it.
+	- The localization script should check for use of face/text: code and list warnings, to use SHOW-TEXT
+	- the drop-list related problems seem to be a side-effect of this problem
+*table: A way to set the sort-oder ASC/DEC for a specific column at run-time.
+*table: A way to specifify the sort order within the OPTIONS block
+*graph: add a REMOVE-NODE ID function to remove nodes (I have added CLEAR-NODES) and all edges from/to this node
+*graph: add an ACTION function that is called if an edge/node is created/deleted to update other GUI parts
+*graph: add a function to get a node by node-ID so that I can get/set the Label etc.
+*chart: Ladislav has two chart types "spider" and "plot". Take a look at his user directory. He agreed, that we can add them to the chart widget.
+*chart: Add chart subtype "min max bar" with min/max values per bar. The area between min and max should get a different color.
+*chart: Add waterfall type (upward & downward subtypes)
+*graph: add a hierarchical node layout mode (see algorithms from Sugiyama, Tagawa and Toda, http://www.yworks.com/products/yfiles/doc/developers-guide/hierarchical_layouter.html)
+	The goal is that the user can follow the flow of material from left to right
+*general: The official CTX-REBGUI seems to be a bit different. For example it has: ctx-rebgui/build, ctx-rebgui/colors/button Can we get our version in line with it.
+*layout: take a look at production-people.r around line 284, the button is only shown if the PAREN returns a result. If not, the button is missing.
+	text "Spalte I gesetzt = Index Wert (Dez 1995 = 100, vor Dez 1995 Referenzjahr 1990 = 100)"
+	return
+	(
+		if company/country_code = "DE" [
+			compose/deep [
+				label "Mindeslohndaten"
+				return
+
+				min-wage-table: table #W 250x40 (database-benchmark/minimum-payment-table-options) data [(min-salary-de-table-data)]
+				return
+			]
+		]
+	)
+	button 20 "Ok" [hide-popup]
+*chart: Please take a look at http://www.palo.net/uploads/palo_scr06.jpg Adding such a meter subtype.
+*chart/torus: The legend should be placed that far from the chart, that the longest displayed value doesn't cover a legend part. Not the case at the moment (see screenshot)
+*chart: label positioning is to narrow for dense pieces. Maybe a heuristic is the following:
+	- use several label rings around a torus
+	- if a piece is small (WRT overall dgrees used from 360) place label in the next label-ring
+	- calculate offset vertical to piece edge
+*chart: (pie/torus) I have some quite long labels the graph should size in a way that everything is shown in complete:
+	- numbers
+	- torus
+	- legend
+	at the moment the legend is cut-off at the right side and the legend color boxes are positioned to far right (see screenshot)
+*drop-tree: an option that dt/select-node "1/6" dt/update fires the associated action & the drop-tree should be expanded as if the user has clicked level1-1 and than level2-6
+*confirm: A REQUEST compatible widget that supports normal RebGUI layout. Example:
+	REQUEST/confirm [text "List of files to delete" return table options ["Files" center 1.0] data [filelist]]
+	Question is how to support either auto REDUCE or COMPOSE so that I can provide dynamic data for FILELIST
+*group-box: Add on-focus / on-unfocus ACTION block.
+*table: a way to specify converter per columns working on /data block. For example /data holds the numeric value 7.694433e-2 and this should be displayed as 7,6944
+*unknown: I got this error once. Any idea what caused it?
+	** Script Error: tail expected series argument of type: series port
+	** Where: action
+	** Near: system/view/caret: tail system/view/caret ctx-rebgui/edit/hilight-all system/view/focal-face
+	>>
+
+===NOT REPRO
+*table: if a column contains numbers (integer/decimal) sorting is broken. Sorting is done by ASCII values, not by number values.
+	Cyphre: it works for me ok. Can you provide specific example of this issue?
+
+*group-box: If I spezify a size for the group-box and the contained layout is smaller, the group-box is smaler as well. It should in any case have the size I specify. Applies to panel as well.
+
+===POSTPONED
+*field: If I use "font [align: 'right]" the editing of a field is screwed up. You can move the cursor or enter text at the right position.
+	Cyphre: This a known bug in native caret handling functions and cannot be fixed from Rebol script level.(the same behaviour is under VID too)
+*display/dialog: I use a dialog but if the user just closes the dialog via the X after some time I get:
+	** Access Error: Port none already closed
+	** Where: find-face
+	** Near: if all [object? :f any [all [none? widgets not get in f 'pane] all [widgets find first f
+	'type find widgets f/type]] wit...
+
+===FIXED / DONE
+*GAUGE - here is example of all possible feauters of new GAUGE widget:
+	display "Test" [
+		g: gauge options [
+			colors [0.200.0 0 red 5 0.200.0 7 red 12] ;format is color, weighted X position
+			tool-tip-action [return form matched-point] ;MATCHED-POINT is a block! of [index value] pair, string! or block! can be returned to display either text or layout in tooltip
+			point-action [print [mouse-pos matched-point]] ;MATCHED-POINT - same as above, MOUSE-POS position when clicked
+		]
+		data [0 5 7 12] ;X values of the points on the gauge, the X range depends on the COLORS position information
+	]
+	also you can use gauge/set-options or gauge/set-data and then 'show gauge' to control the widget dynamically
+*TABLE - added FILTER keyword to OPTIONS block for columns spec. Now it is possible to write:
+	table options ["ID" left .3 "Number" right .1 filter "Char" center .2  filter "Col4" center .2 "Col5" center .2]
+	so in this example columns "Number" and "Char" will have the column filter enabled
+*CHART-NEW new API calls
+	SELECT-POINT p [string! integer! block! word!] state [logic! word!] - this function allow select XYplot graph point(s) programatically
+	The P argument can be integer: index(abstract position, independent from the data structure) of the point, string: id of the point defined in the point block definition,
+	word: if 'all is specified it handles state of all points, or block: to specify multiple points using either indexes or ids.
+	The STATE arg turns the selection on or off or switch between states. Values can be true/false,on/off or 'switch
+	NOTE: There is also /point-data-index refinement which have to be used for passing the POINT-DATA index value when called from TOOL-TIP-ACTION or POINT-ACTION. This way the index is translated properly.
+*CHART-NEW tooltip keywords
+	GRAPH-PAN - enables graph panning using mouse drag+RMB
+	GRAPH-ZOOM - enables graph zoom using SHIFT+mousedrag+RMB or using MOUSE-WHEEL
+	GRAPH-MAX-ZOOM number! - sets the maximum user can coom into the graph (values example 1.0 = original 10 = 10xZoom), 10xZoom is default
+	GRAPH-CONTROLS - enables control button UI for PAN and ZOOM
+	HILITE-POINTS - points are hilited when mouseover
+	CROSS-HAIR - puts mouse crosshair over the graph layout
+	TOOL-TIP-COORDS - this will turn the automatic graph coordnates in tooltip
+	TOOL-TIP-ACTION block! block!- action block is called when user hover over point. You can use MATCHED-POINT value to get graph point that matches the hover.
+                             Also ADJACENT-POINTS is available - array of neighbour points(in case there are some around) of same format as MATCHED-POINT
+	The MATCHED-POINT format:
+		POINT-POS[pair!] absolute position of the point in pixels
+		POINT-ID [string!] optional ID of point
+		POINT-DATA[block!] reference to original point data block. it can be used to change or get index of the tada point
+		The action block should return STRING!(will be displayed in the toolitp) or BLOCK! of valid RebGUI layout or FALSE(if no tooltip should be shown).
+	POINT-ACTION block! - action block is called when user clicks on point.You can use:
+		MOUSE-POS [pair!] - position of mouse when clicked
+		MATCHED-POINT [block!] - same format as above
+		ADJACENT-POINTS [block!] - array of neighbour points(in case there are some around) of same format as MATCHED-POINT
+
+	simple example of the new keywords:
+    tool-tip-coords
+
+    tool-tip-action [
+     use [result more][
+      result: copy ""
+      foreach [point-pos point-id point-data] matched-point [
+       insert tail result reduce [
+        "point" any [all [point-id rejoin [" " point-id " "]] " "] "at: " point-data/1 "x" point-data/2 either more [newline][""]
+       ]
+      ]
+      return result
+     ]
+    ]
+
+    point-action [
+		print ["MOUSE CLICKED at position:" mouse-pos]
+		foreach [point-pos point-id point-data] matched-point [
+			print [
+				"Point matched:" point-pos point-id point-data/1 "x" point-data/2
+			]
+		]
+    ]
+FIXED*check/check-group: Integrate the BISTATE option. "Uploaded build#102 with 'bistate option for check and check-group. Option disables right-click state selection."
+	checkgroup options [bistate]
+FIXED*input-grid: Add an empty cell-action so that code referring to cell-action won't crash
+FIXED*input-grid: An optioin that the tabbing is done from top-to-down and not left-to-right
+	input-grid data [tabbing top-bottom]
+FIXED*table: If the sort up/down arrow overlaps the header column (because column width is small) switch to an alpha blended version, so that the text can still be seen (arrow in grey instead of black?)
+FIXED*general: Using DRAW together with ALERT (assumption from my side) results in a bug as soon as the mouse touches the alert window
+	tmp: make object! [
+	    code: 312
+	    type: 'script
+	    id: 'cannot-use
+	    arg1: 'divide
+	    arg2: 'none!
+	    arg3: none
+	    near: [arg: 180 + i: 1]
+	    where: 'screen-to-xy
+	]
+FIXED*text-field:
+	code: 318
+	type: script
+	id: invalid-part
+	arg1: ""
+	arg2: none
+	arg3: none
+	near: [remove/part start end view*/caret: start]
+	where: delete-selected-text
+
+	tmp: make object! [
+	    code: 318
+	    type: 'script
+	    id: 'invalid-part
+	    arg1: ""
+	    arg2: none
+	    arg3: none
+	    near: [remove/part start end view*/caret: start]
+	    where: 'delete-selected-text
+	]
+FIXED*chart: Need a way to have a transparent background.
+	Cyphre: you can use back-color none for this
+FIXED*chart: If numbers are used that are bigger than MAX-INT (2 ** 31 - 1) chart crashes with a math/overflow error in a to-integer conversation. Chart needs to handle numbers of range like decimal!
+	Cyphre: I have fixed this in both chart and chat-new widgets
+FIXED*new-graph: For limit I need to specify two pairs. What if for one axis no limit applies and the best fit should be used? I used 0x0 and -1x-1. In this case the fit works for the first series but updating the chart doesn't trigger a new best-fit-scaling. this is necessary.
+	Cyphre: the SCALE -1x-1 should be working for you now.
+FIXED*new-graph: The font looks bad if using a non quadratic layout. See screenshot.
+	Cyphre: now, you can use FONT-SIZE in the dialect to refine font height
+FIXED*new-graph: It seems that I have to specify a SCALE
+FIXED*timer widget: create timer widget
+	Cyphre: I have added first version of the timer widget. Code example follows:
+	do %rebgui.r
+	display "timer test" [
+		t: timer rate 10 [print ["hello" random "world" "at rate:" t/rate]]
+		button "start" [t/start print "timer started"]
+		button "stop" [t/stop print "timer stopped"]
+		button 30 "set random rate" [t/set-rate random 20 print ["rate set to" t/rate]]
+	]
+	do-events
+FIXED*new-graph: Looks like BAR has always quadratic size. Using CHART-NEW 200x30 gives a very small chart.
+	Cyphre: I tried folowing code and created non-quadratic graph:
+	bar-data: [
+		"Foo" red [10 30 0 60]
+		"Bar" green [-15 -20 3 15]
+		"FooBar" yellow [-28 36 14 -9]
+	]
+	display "Test" [
+	chart-new 200x30 data [
+	    graph bar vertical
+	    data bar-data
+	   ]
+
+
+	]
+	do-events
+FIXED*new-graph: LIMIT should be possible to only specify X or Y as well. Something like: LIMIT 0x100 -1x-1 (meaning limit/scale Y to best fit given data)
+FIXED*new-graph: I get this error because the SCALE keyword is missing. Either is should throw an error message or pick a "best fit" default SCALE value
+	code: 303
+	type: script
+	id: expect-arg
+	arg1: compute-scale
+	arg2: scale-ticks
+	arg3: [number! block!]
+	near: [x-scale-ticks: compute-scale x-scale-ticks 'x-min-value 'x-max-value]
+	where: draw-graph
+
+	That's my new-graph definition. NOTE: the X limits starting not at 0 because these are year numbers.
+			xy: chart-new 200x25 data [
+				graph xyplot
+				grid 14x6 black
+				limit 1996x2010 0x100
+				color-ranges [
+					 1 10 220.220.220.120
+					10 14 200.200.200.120
+				]
+
+				data xy-data
+			]
+
+	And this XY-DATA
+		xy-data: [line 1 black [2001 4519.0 2002 4617.0 2003 4725.0 2004 4821.0 2005 4888.0 2006 4919.0
+        2006 4955.9523809524
+        2007 5039.06666666668
+        2008 5122.18095238096
+        2009 5205.29523809525
+        2010 5288.40952380953
+    ]]
+FIXED *grid: When using visible-rows [] I get:
+	code: 304
+	type: script
+	id: expect-set
+	arg1: logic!
+	arg2: integer!
+	arg3: none
+	near: [f/offset/y: p/get-row-index - 1 -]
+	where: show
+FIXED *grid: insert-row/insert-column if no ID is given (or NONE used) add as last row/column
+FIXED *grid: cursor movement within fields don't work. Using cursor left, exits the field edit mode
+FIXED *grid: If the grid width isn't filled up with enough columns, the yellow current-selected-line indicator is drawn over the full width. IMO that's a bit irritating. Only existing columns should be highlighted.
+FIXED *grid: Seems it's not using the RebGUI color references instead some hard-coded colors.
+FIXED *grid: When using visible-rows [0] I get:
+	tmp: make object! [
+	    code: 304
+	    type: 'script
+	    id: 'expect-set
+	    arg1: 'logic!
+	    arg2: 'integer!
+	    arg3: none
+	    near: [f/offset/y: p/get-row-index - 1 -]
+	    where: 'show
+	]
+FIXED *grid: double-clicking on a field (row-spec [field 25]) gives (see: analysis-regression.r and Analyse/Regressionsanalyse within MVD) if empty content block is provided:
+	tmp: make object! [
+	    code: 303
+	    type: 'script
+	    id: 'expect-arg
+	    arg1: 'tail
+	    arg2: 'series
+	    arg3: [series! port!]
+	    near: [view*/caret: tail face/text if face/para]
+	    where: 'focus
+	]
+FIXED *grid: Using an mostly empty specification doesn't work. I used:
+		attribute-grid: grid 150x40 data [
+			header []
+			visible-columns []
+			visible-rows []
+			row-spec [
+			]
+			content []
+		]
+	and go this error:
+		code: 315
+		type: script
+		id: past-end
+		arg1: none
+		arg2: none
+		arg3: none
+		near: [picked/row-number: first visible-rows picked/row: pick]
+		where: init
+	adding header and row-spec stuff leads to:
+		code: 312
+		type: script
+		id: cannot-use
+		arg1: path
+		arg2: none!
+		arg3: none
+		near: [grid-box/pane/:n/size/x]
+		where: build-header
+FIXED *drop-tree: add an RESET-ACTION that selects no entry and closes all nodes
+FIXED *drop-tree: openning the drop-list positions the cursor on the right side of the input field, looks like some TABs are inserted. Can be deleted by backspace
+FIXED *drop-tree: adding an ACTION [TRUE] on a node level does select the entry into the drop-tree field, but doesn't close the drop-tree (selecting a leaf closes the drop-tree selection list); opening & closing nodes after this is a bit buggy for the 2nd node, see "Eingabe/Arbeitsplätze" and than "Fertigungsverfahren"; machine.r
+FIXED *drop-tree: using SELECT-NODE with path (numeric/tex) to a leaf that is included in a closed node, doesn't work. Solution: Should expand the node and set the leaf
+FIXED *show-text: SHOW-TEXT now works properly with the I18N system
+	Cyphre: NOTE! Don't call SHOW from ON-TRANSLATE callbacks. It will cause recursive lockup. So all use all related Rebgui API functions with /NO-SHOW refinement in such case.
+FIXED *tool-tip: Seems like tool-tip isn't I18N aware, or if, if no translation is found a <loc> string is returned.
+FIXED *drop-tree: used Ladislavs code from testing-dialect to extend SELECT-NODE to take a string path like "entry-text-level1/entry-text-level2" beside giving a numerical path "1/2/1" (makes drop-tree position independent)
+FIXED *drop-list: When using the filter / editable mode and a user starts typing and selects an entry: PICKED and TEXT are not in sync. TEXT contains the prior selected entry.
+FIXED *drop-list: When using the filter / editable mode and a user starts typing, the field is filled with the complete selection text. When pressing TAB the action is fired but the TEXT is not set to the new selected TEXT.
+FIXED *drop-list: drop-list now works in a DISPLAY/DIALOG layout too
+FIXED *display: DISPLAY/DIALOG doesn't work as modal window
+FIXED *drop-tree: opens drop-list at total wrong place, see file machine.r line 268, uncomment drop-tree code, build MVD, goto "Eingabe/Arbeitsplätze" and use the drop-tree at the right
+FIXED *tooltips: Add a way that a function is called to return a string that's shown. I need this to show dynamic content in the tooltips like, from what parts a sum was calculated.
+	Cyphre: I have added TOOLTIP-ACTION keyword to the display dialect so you can write:
+	b: button 50 "Test button" tool-tip "" tooltip-action [
+		tool-tip/text: join "tooltip at " event/offset
+		tool-tip/size: 4 + size-text tool-tip
+	]
+	NOTE1: The TOOLTIP-ACTION block! is body of function which takes 3 arguments: FACE, TOOL-TIP and EVENT. FACE is face related to the tooltip. TOOL-TIP is face of the tooltip. The EVENT is event! which occurs during the tooltip popup.
+	NOTE2: if the TOOLTIP-ACTION function returns FALSE the tooltip is not shown.
+FIXED *tooltip: Is it possible not only to use a STRING! but a more complex layout? I would like to show up things like chats etc. on mouse-over.
+	Cyphre: You can now specify any layout block after the TOOL-TIP keyword for example:
+	b: button 50 "Test button" tool-tip [box red 5x5]
+FIXED *drop-tree: clicking outside of the drop-tree-list no longer closes it
+FIXED *drop-tree: I will post an update to machine.r with a drop-tree (you can access it via "Eingabe/Arbeitsplätze"), it has some problems with the quick-access numbers. The tree isn't always expaned correctly. Just try to select some entry, than scoll up, press 2/3 etc.
+FIXED *drop-tree: add possibility to have gauge in front or at back of the item line
+	Cyphre: default is gauge at back. If you specify: options [gauge front] the gauge is placed in front
+FIXED *drop-tree: add possibility to have gauge at back of the item line left/right aligned
+	Cyphre: default is gauge right aligned. If you specify: options [gauge back left] the gauge is left aligned
+FIXED *drop-tree: add action-inherited keyword
+	Cyphre: now if you write for example:
+	data [
+		"Urformen" [
+			"Gießen" action-inherited [true]
+			"Sintern"
+			"Druckgießen"
+			"Metalldampfen"
+			"Spritzgießen"
+			"Extrusion"
+			"Kalandrieren"
+			"Schäumen"
+			"Blasformen"
+			"Extrusionsblasen"
+			"Galvanoformen"
+		]
+	]
+	all the items after the item with action-inherited keyword inherit the same action block. Then action inheritance ends with new node definition.
+FIXED *field: Add ON-DIRTY handling
+	Cyphre: If field/options contains 'on-dirty handler-function-name [word!] then the handler function is called everytime text is changed by keyboard.
+	You can call the field/dirty-action face [object!] function from your app too if needed.
+FIXED *table: Add a way to specify "table can not be sorted" to disable sorting functionality
+	Cyphre: If table/options contains 'disable-sort then sorting is disabled.
+FIXED *general: POS1 and END keys are no longer handled correctly, some strange chars are shown
+	Cyphre: USe the latesr Rebol/View this should be fixed from version  2.7.5.3.1 16-May-2007
+FIXED *I18N: make REQUEST I18N aware
+FIXED *I18N: #LB isn't working. Issue is not removed from source code.
+FIXED *input-grid: Should we call CELL-ACTION for each call when SET-GRID is called? IMO yes, at least we need a refinement to do.
+FIXED *drop-list: If I delete the characters from the back while a filtered list is shown, the characters are still visible, whereas the curser moves left
+	Cyphre: I have revorked the code so it show only the currently written text
+FIXED *drop-list: It's possible to use cursor-up/down if a selection list is shown. But the selection is fired on the first entry, there is no way to scroll through the list.
+	Cyphre: you can now use UP/DOWN keyboard arrows to choose from selection list. Use ENTER to confirm your selection or ESC to close the selection list.
+FIXED *alerts: It seems that alerts are displayed only shortly and are hidden immediatly.
+FIXED *graph: I have this problem
+	tmp: make object! [
+	    code: 303
+	    type: 'script
+	    id: 'expect-arg
+	    arg1: 'empty?
+	    arg2: 'series
+	    arg3: [series! port! bitset!]
+	    near: [if empty? node-2/edges [node-2/edges: none] node-1/neighbours:]
+	    where: 'rem-edge
+	]
+	>>
+FIXED *general: Running TOUR.R against our version gives. When converting the content to ["3" "4"...] it works
+	data: [3 4 5 6 7 8 9]
+	** User Error: check2: bad drop-list DATA format
+	** Near: make error! "check2: bad drop-list DATA format"
+	>>
+FIXED *graph: add an CLEAR-NODES function (that calls CLEAR-EDGES as well)
+FIXED *drop-list: The new unfocus-act code seems to generate a call loop, the problem must be in this code segment:
+	unfocus-act: :unfocus-action
+	unfocus-action: make function! [face] [
+		face/picked: face/text
+		hide-popup
+		face/action face
+		unfocus-act face
+	]
+
+	It generates the follow error:
+
+	** Internal Error: Stack overflow
+	** Where: signal-vfsm
+	** Near: unless in events event [
+	    throw make error! rejoin ["unknown event: " event]
+	]
+	** Press enter to quit...
+FIXED *table: Seems an old bug is back. This one happend while a DIALOG was open. I think that either parent-face/data might be empty or none.
+	** Script Error: index? expected series argument of type: series port
+	** Where: action
+	** Near: index? find parent-face/data last-selected
+	** Press enter to quit...
+FIXED *general: RESET-ACTION: For the following widget we can implement the action
+	- field: set TEXT to "" and DATA to 0
+	- label: set DATA to 0
+	- area : set TEXT to "" and DATA to 0
+FIXED *general: with the aboce a RESET method for a layouted GUI would be nice. So that I can call my-gui/reset and it will call the RESET-ACTION of each widget. Maybe it's possible to add widget types by refinement or block:
+	- mygui/reset/field
+	- mygui/reset [field label]
+	- There is CLEAR-WIDGET which sounds a bit like this request
+		Cyphre: you can now use either:
+			mygui/reset
+		or
+			mygui/reset/widgets [field label]
+		or
+			ctx/rebgui/reset-widgets mygui
+		or
+			ctx/rebgui/reset-widgets/types mygui [field label]
+FIXED *graph: I wanted to start with an empty graph but I can't specify a drawing size. I had to position at least on box with AT to make the canvas big enough.
+FIXED *graph: The label text seem to be sometimes left aligned and than centered.
+FIXED *general: (proportional) resizing, some widgets like TABLE and DROP-TREE don't resize well at the moment. Screwedup layout.
+FIXED *drop-list: When using EDIT and FILTER mode, having a list with entries so that more than one entry matches the user input, the drop-list is shown dynamically while being dynamically resized as well (less lines as you type). The list is shrinked in height but upward. So that you get a gap between the input field and the entries in the drop-list. See screenshots: drop-list1.png and drop-list2.png. I just typed D and then E
+FIXED *graph/bar: If the data block is cleared or the single value is 0 I get.
+	Datablock exmaple: 	split-data:  ["Foo" red [0]]	; bar chart
+
+	** Math Error: Attempt to divide by zero
+	** Where: rejoin
+	** Near: 100 / sums/:idx2
+	>>
+FIXED *table: I have changed ADD-ROW to return the newly inserted row number. Please cross-check this code
+FIXED *table: There seems to be one case where this error happens. I have guarded the code but I'm not sure this is correct
+	** Math Error: Attempt to divide by zero
+	** Where: select-row
+	** Near: pane/1/pane/2/data: 1 / (rows - lines) *
+	Cyphre: your fix looks OK to me.
+FIXED *table: I once got this error for an empty table, when the user clicked inside the table or used the sort function.
+	** Script Error: index? expected series argument of type: series port
+	** Where: action
+	** Near: index? find parent-face/data last-selected
+FIXED *layout: When I use PAD X as the first keyword, the X offset is downward not sidewards
+FIXED *drop-list: When using the filter / editable mode and a user starts typing, the field is filled with the complete selection text. If the user now tabs out of the drop-list (as he thinks, ok selection made), the list stays open and no action block is triggered. We now have two options:
+	1. We trigger the ACTION block on TAB (but this might conflict with ON-UNFOCUS) and close the selection list
+	2. We restore the state before changing, as the user didn't make an explicit selection
+	Cyphre: I have chosen the first(1.) solution. It shouldn't conflict with on-focus/unfocus. Please try it and let me know if there is any problem.
+FIXED *tree widget: Standalone tree widget, where the interface is like the drop-tree one. I hope we can reuse/share code with the drop-tree
+FIXED *chart/bar: If the smalest value is an INTEGER the scale should start just below this value. At the moment it starts exactly AT this value. See bar-chart4.png
+FIXED *drop-tree: a function that returns the path of the picked node. GET-PATH (?) which returns "1/2/3" or maybe better a block [1 2 3]
+	Cyphre: added GET-PICKED-PATH function which returns the block! of path numbers
+FIXED *chart/bar: Please take a look at bar-chart3.png, the scale labeling is somehow screwed up
+FIXED*tooltips: ctx-rebgui/tool-tip-delay: 0:00:05 ;sets the tooltip delay for 5 seconds
+FIXED*resizing: Adding proportional resizing. The current resizing system is good but doesn't support proportional resizing. For example having left to right:
+	button 20 "A" button 20 "B" button 20 "C"
+	Cyphre: I have added #WP #HP #XP #YP keywords so you can do proportional scaling or translation. Example:
+	display "Test" [
+			table #WPXPH options ["table1" left 1.0] data [1 2 3]
+			table #WPXPH options ["table2" left 1.0] data [2 4 6]
+			table #WPXPH options ["table3" left 1.0] data [3 6 9]
+	]
+	do-events
+FIXED *table: Add mouse-wheel support for up/down scrolling
+FIXED *input-grid: A way where I can change the text of the labels at run-time.
+	Cyphre: added input-grid/get-label-faces accessor. It returns block of either row or column faces. Example:
+	;to get coulmn faces
+	foreach f ig1/get-label-faces/columns [
+		probe f/text
+	]
+	;to get row faces
+	foreach f ig1/get-label-faces/rows [
+		probe f/text
+	]
+	;to get both (separated in blocks)
+	;to get coulmns
+	ig1/get-label-faces/rows/columns
+FIXED *table: A way where I can change the text of the columns-labels at run-time. I use a functio like this
+	set-currency: func [face start end][
+		insert clear face/text rejoin [start company-finance/default_cur/picked end]
+		show face
+	]
+	and call it like this:
+	set-currency my-face "costs (" "\part)"
+	Cyphre: added table/get-label-faces accessor. It returns block of faces of each column label in table. So you can use it like:
+	foreach f my-table/get-label-faces [
+		set-currency f "costs (" "\part)"
+	]
+FIXED *chart: TITLE the title text should have a transparent background color
+	Cyphre: added optional color argument to the keyword TITLE so you can write for example:
+		title red "Title of the graph"
+FIXED *chart/bar: when using %-values the diagramm isn't correct. The biggest entry = 100% whereas the % should be of the sum of all bar values (see screenshot)
+FIXED *chart/bar: If the lables don't fit into the column width, rotate labels by 90°
+FIXED *table: add-row now returns the row the data was added, so that it can be used with select-row
+FIXED chart/pie: When only 1 data entry was present in show-percentage mode, the legend showed 50% not 100%
+FIXED *general: When I use text-align left/right etc. The change is global, hence all texts have than a new alignment. The scope of this directive should be the current layout, group-box, panel
+	Cyphre: I have tried it and it already works like that. See example:
+	Robert: Try it for TEXT, LABEL etc. I get the problem there, as this might be the global text-align directive than, if the widget can't handle it.
+	Cyphre: I tried it for TEXT and label too and it works ok. Try the following example code.
+		do %rebgui.r
+
+		fld-text: "field example"
+		lbl-text: "label example"
+		txt-text: "text example"
+
+		display "Test"
+		[
+
+			after 1
+			field fld-text
+			field fld-text text-align center
+			panel sky data [
+				after 1
+				field fld-text
+				field fld-text text-align right
+			]
+			field fld-text
+			group-box "group" data [
+				after 1
+				field fld-text
+				field fld-text text-align right
+			]
+			field fld-text
+
+			after 1
+			text-align left
+			label white 50 lbl-text
+			label white 50 lbl-text text-align center
+			panel sky data [
+				after 1
+				label white 50 lbl-text
+				label white 50 lbl-text text-align right
+			]
+			label white 50 lbl-text
+			group-box "group" data [
+				after 1
+				label white 50 lbl-text
+				label white 50 lbl-text text-align right
+			]
+			label white 50 lbl-text
+
+			after 1
+			text-align left
+			text white 50 txt-text
+			text white 50 txt-text text-align center
+			panel sky data [
+				after 1
+				text white 50 txt-text
+				text white 50 txt-text text-align right
+			]
+			text white 50 txt-text
+			group-box "group" data [
+				after 1
+				text white 50 txt-text
+				text white 50 txt-text text-align right
+			]
+			text white 50 txt-text
+
+		]
+		do-event
+FIXED *drop-tree: If a sub-node has an ACTION and the parent node not, the parent node is displayed grayed-out, should be solid.
+FIXED *chart/torus: if there is only one entry in the data list there is no torus drawn (percentage mode)
+	>> material/material-data
+	== ["Material lt.Hr.Böhne 413.-" 0.102.76 660.0]
+FIXED *chart/bar: If the shown data values are <1 the scaling is screwed up. See screenshot bar-chart2.png
+FIXED *chart/bar: The following dialect words don't seem to have an effect
+	show-value-as percentage
+	order-by 	  size-down
+FIXED *chart/bar: Label positioning isn't directly under the grid line, confuses users
+FIXED *chart: the % numbers are not good to read. See some screenshots. I have made the labels totaly black. Any better idea how we can improve this?
+	Cyphre: I tried to improve the font readability. You can also play with font size keyword to get better results in some cases.
+FIXED *chart: A way to click on the legend and get an action block called, which provides the legend ID & legend text (like: picked, selected for other widgets). Maybe it's even possible to click on the pie-parts, bars etc. in the chart graphic
+
+FIXED *chart/bar: If I make the chart box wider the space isn't used for the bars (see screenshot bar-chart1.png) If the legend uses its maximum required space the chart area should be extended
+SOLVED *drop-list: If I use the autofill, autofilter feature, and an entry is displayed in the selection list, and I click it, /picked is set to a string and not a block.
+SOLVED *drop-list/filter-list: When starting to type, the list should automatically open and be filtered in real-time (by sub-string search). At the moment, the list just shows up if an entry was found.
+SOLVED *drop-list: I'm using code like this and get the following error. The error has several effects.
+	Cyphre: the three following issues has been cused by wrong used drop-list/data format I added error checking so user know that the right format is 'block-of-strings'
+	Robert:
+	- if I start typing the text isn't auto-filled
+	- if I have typed in an entry of the list, the care is vanished (like auto-fill has completed)
+	- clicking in the field somewhere in the middle of the displayed text gives the error
+	; load country drop-list and set widget flags
+	country/data: static-data/countries
+	country/editable?: true
+	country/auto-fill?: true
+	country/redraw
+	** Script Error: Out of range or past end
+	** Where: switch
+	** Near: unless equal? view*/caret offset-to-caret face
+	>>
+	Cyphre: this should be already fixed. I have tested it with your data and it works ok for me. Please use the latest version of RebGUI from xpeers and let me know. You might also try to use this settings country/auto-fill?: 'filter-list if you need to see the dropdown list during the filling.
+	Robert: This bug is reproducable. After an entry is shown and the caret vanished, try clicking in the field somewhere in the middle of the displayed text. Here is my data block:
+	>> probe company/country/data
+	[["Aegypten"] ["Albanien"] ["Argentinien"] ["Aserbaidschan"] ["Australien"] ["Belgien"] ["Bolivien"] ["Bosnien-Herzegowina"] ["
+	Brasilien"] ["Bulgarien"] ["Chile"] ["China"] ["Daenemark"] ["Deutschland"] ["Dominikanische Republik"] ["Estland"] ["Finnland"
+	] ["Frankreich"] ["Georgien"] ["Griechenland"] ["Hongkong"] ["Indien"] ["Indonesien"] ["Irland"] ["Israel"] ["Italien"] ["Japan
+	"] ["Kamerun"] ["Kanada"] ["Kasachstan"] ["Kenia"] ["Kirgisistan"] ["Kolumbien"] ["Kroatien"] ["Lettland"] ["Liechtenstein"] ["
+	Litauen"] ["Luxemburg"] ["Malaysia"] ["Marokko"] ["Mazedonien"] ["Mexiko"] ["Moldawien"] ["Mongolei"] ["Neuseeland"] ["Niederla
+	nde"] ["Norwegen"] ["Panama"] ["Paraguay"] ["Peru"] ["Philippinen"] ["Polen"] ["Portugal"] ["Rumaenien"] ["Russland"] ["Saudiar
+	abien"] ["Schweden"] ["Schweiz"] ["Serbien und Montenegro"] ["Singapur"] ["Slowakei"] ["Slowenien"] ["Spanien"] ["Suedafrika"]
+	["Suedkorea"] ["Tadschikistan"] ["Taiwan"] ["Thailand"] ["Tschechien"] ["Tuerkei"] ["Tunesien"] ["Turkmenistan"] ["Ukraine"] ["
+	Ungarn"] ["Uruguay"] ["Usbekistan"] ["Venezuela"] ["Vereinigte Arabische Emirate"] ["Vereinigte Staaten"] ["Vereinigtes Koenigr
+	eich"] ["Vietnam"] ["Weissrussland"] ["Österreich"]]
+FIXED *drop-list: If I type the field is filled with a match, the cursor is somewhere in the text, I than just hit enter to select an entry. But /picked is not yet set to this new entry.
+FIXED *drop-list: Does it makes sense to fire the select action if /set-picked was used? IMO this would be consistent.
+FIXED *input-grid: /reset now sets /text of each cell to "" and /data to NONE
+FIXED *pane: The pane's marging and space (?) should be preset to 0 so that a pane doesn't has any influence on the positioning of the next widgets. In the following example, box A and B should be on the same vertical position, top-aligned. At the moment box B is shifted down by about 8 pixel. Looks like setting margin to 0x0 by hand doesn't has an effect on the Y position.
+	group-box "A" []
+	return
+	pane data [
+		group-box "B" []
+		return
+		group-box "C" []
+	]
+	Cyphre: the margin of panel layout is now 0x0 by default. But you can chenge it using the MARGIN keyword in the layout too.
+FIXED *drop-list: If I use the code below, open a drop-list and just click somewhere else, the drop-list isn't closed without a change. I first have to select an entry.
+	pcdl/editable?: true
+	pcdl/auto-fill?: true
+	pcdl/popup-mode: 'outside
+	pcdl/lines: 10
+	pcdl/redraw
+FIXED *table: If I use a table in a popup with DISPLAY/DIALOG "Arbeiststunden" COMPOSE/DEEP [ and move the mouse over the first column in a table I get a very strange graphics effect. See screenshot. The problem is only present for the first two columns. It looks like the columns are split in some way.
+FIXED *general: When I use something like this "label my-text" where my-text is a string in a context, the text is copied to label/text. Hence if I change "my-text" and SHOW the gui again, nothing is changed. I need a way where I can specify such labels but without having to name each or explicitly calling a function to change the text. This kind of label should handle two strings: 1st a pattern string like "Costs (?/h)" and 2nd a display string, where the pattern (? in this case) is replaced on the fly if the widget is shown by calling a provided replacement function with the pattern string and assigning the result to the displaystring. So, by just showing the LABEL the text can change, by whatever rule is required.
+	Cyphre: I have already recommended to use this kind of technique:
+	do %rebgui.r
+	my-text: "hello world"
+	gui: ctx-rebgui/layout [
+		after 1
+		label my-text
+		label my-text
+		label my-text
+		label my-text
+		button "hop" [
+			insert clear my-text "other text"
+			show gui
+		]
+	]
+	view gui
+FIXED *table: A way that will trigger the line-change only if the selection lasts for a specific time period. At the moment if the user uses the keyboard to scroll the selection bar the event is fired every time.
+	Cyphre: I set the time period to 0.2 seconds. Let me know it this is enough.
+FIXED *table: A way that selection triggers will be filtered out at the top/bottom of the table to avoid selection trigger.
+	Cyphre: select actions aren't triggered when the bar is already on top or bottom.
+FIXED *input-grid: Add a way to set DATA & TEXT default values in way that only one value is specified. Example: text-values: ["0"]	data-values: 0.0
+	Cyphre: enhanced the DATA dialect so if you specify:
+		input-grid data [values and data ["1" "5.5" "3.2"]]
+	the DATA value of each cell object is set
+	You can also call my-input-grid/set-data function to set the DATA values according to the TEXT values
+FIXED *input-grid: I need SET-GRID / GET-GRID to work on the DATA part as well. At the moment these functions return the TEXT part.
+	Cyphre: added refinement /DATA to functions: input-grid/set-cell input-grid/get-cell input-grid/set-grid input-grid/get-grid so from now you can also set/get the DATA values of cells.
+FIXED *drop-tree: make drop-tree/text a refenrece to dt/pane/1/text (the shown text in the input line)
+FIXED *general: These words seem to be in the global context:
+			ex-status 	 object
+	FIXED	siblings 	 block
+	FIXED	norm-data 	 block
+	FIXED	beg 	 	 block
+	FIXED	col-action 	 none
+	FIXED	row-action 	 none
+			uti 	 	 object
+	FIXED	siblings 	 block
+	FIXED	norm-data 	 block
+	FIXED	beg 	 	 block
+	Cyphre:
+	-the word 'ex-status is part of the tour.r demo only. It shouldn't be defined when you use rebgui without the demo.
+	-I was not able to find the 'uti word.
+FIXED *radio-group: the /reset function for radio-group should select the item that's specified as default-value when the widget is initialized.
+FIXED *input-grid: If a user clicks in an other field, the ON-UNFOCUS action isn't fired.
+FIXED *input-grid: I'm using DATA & TEXT of the cells. Wehre the DATA part stores the decimal! value and TEXT a formated representation. This screws up field editing as the cursor movement isn't synced with the TEXT content.
+FIXED *chart/pie: the pie should always be/stay as a circle however I set the size of the chart. Extending the x size extends the space used for the legend so that long legend texts are fully shown
+FIXED *chart: A way to set the colors without having to create the complete DATA block
+	Cyphre: added chart/SET-COLORS block! where block! contains set of color values.
+FIXED *chart: Add an option if 0 values / percentages should be shown or not.
+	Cyphre: added keyword HIDE-ZERO-VALUES to the graph dialect
+FIXED *chart: when using a word for title and changing the title string /redraw doesn't show the new title
+FIXED *radio-group: SELECT-ITEM return TRUE if a new item was selected else FALSE.
+FIXED *radio-group: add an /no-action refinement for SELECT-ITEM when given will not execute the radio-group action.
+FIXED *drop-list: When the autofill mode is used, I can open the drop-list by pressing the arrow, but I can't scroll the list. The list closes immediatly. Scroll-wheel is not working.
+FIXED *table: Again something to do with sorting. I have three tables that change the column layout. And when wilde clicking on those three for sorting I get this error. What I often use is, that the first column isn't shown. Width set to .0 Maybe this makes some problems. Looks to me as we had this one. See line 61
+	** Script Error: Invalid argument: 2
+	** Where: redraw
+	** Near: sort/skip/compare/reverse data arrow/cols arrow/col
+
+	>> company_tbl/Data
+	== [1 "Petrusky Stahlbau V3"]
+	>> company_tbl/picked
+	== [1]
+	>> company_tbl/cols
+	== 2
+	Cyphre: I think this should be fixed now but if you encounter the same bug please provide also following values for debugging:
+		 company_tbl/pane/5/cols
+		 company_tbl/pane/5/col
+FIXED *table: This error seems to happen when sorting a table.
+	** Script Error: select-row expected row argument of type: integer block
+	** Where: action
+	** Near: select-row (((index? find parent-face/data last-selected) - 1) / cols) + 1
+FIXED *table: If a user sorts a table, the action block for the current selected line is executed whereas the selected line doesn't change. Only the display should change, but no action should happen.
+FIXED *table: If I make a column wider, sort it so that the sort-arrow is drawn and now narrow the column, the sort-arrow is drawn over the left-side column
+FIXED *table: Add an option /no-action so that it's not possible to click on a row. TABLE becomes with this a poor-mans-grid that can just display some information
+	Cyphre: you can enable this mode by adding 'NO-ACTION to the table/options block.
+FIXED *drop-list: Add an option for auto-fill that uses substrings and filters the list. This list should be open while the user types and be filtered while typing. Return selects entry.
+	Cyphre: if drop-list/editable? is set to 'filter-list the this filtered list mode is enabled
+FIXED *The *chart: bar horizontal data block is:
+	["01.Schneiden de" red [22.3758875402908] "02.Kanten der B" green [0.622498276101832] "03.Heften der A" magenta [1.5027958626444] "04.Schweissen d" sky [2.30874052910966] "05.Schleifen al" blue [0.380390088184944] "06.Zwischenwand" red [4.52694221394052] "07.Sandstrahlen" green [2.37035696344569] "08.Aufheizen Tr" magenta [0.9006034669774] "09.Beschichten" sky [0.394892379551997] "10.Verpacken fe" blue [1.13061026455483]]
+	** Math Error: Attempt to divide by zero
+	** Where: switch
+	** Near: beg-line: min-val // tick-line *
+FIXED *chart: bar horizontal if data isn't given as block!
+	** Script Error: Cannot use path on decimal! value
+	** Where: switch
+	** Near: max-val: min-val: graph-data/3/1 bars: 0
+FIXED *chart: bar horizontal
+	** Math Error: Attempt to divide by zero
+	** Where: switch
+	** Near: tick: 360 / rng bar-width:
+FIXED*table: If the data block contains for one row datatype decimal! sorting the table crashes Example (here column 4 was decimal!)
+	** Script Error: Invalid argument: 4
+	** Where: redraw
+	** Near: sort/skip/compare data arrow/cols arrow/col
+
+	>> tbl3/data
+	== [3 "Fracht" "100,00" 100.0 "1,00"]
+	>> tbl3/cols
+	== 5
+FIXED *group-box: if the background uses a gradient or color that isn't light-gray a thin line can be seen through the title text of the group-box
+FIXED *table: Headerline isn't using ctx-rebgui/colors/window as default color.
+FIXED *button: A way to specify a button color.
+FIXED *label: If I use a label-size that is higher than one line for example 20x8 the text isn't shown in bold anylonger.
+FIXED *table: if the layout of column is right and the user sorts the table , the sort arrow is written over the header text
+FIXED *table: if the layout of column is right and the table has a scoll bar, the scroll bar covers the table entries
+FIXED *radio-group: I get an error if a I use the SELECT-ITEM function of a radio group.
+	The strange thing is, if I use my app in a differnt way it works. So somehow I get into a state where some object is NONE.
+	It seems that this happens if the to be selcted entry isn't the first one. At least that was the only difference I could find here.
+	This happens for widgets that are not shown at the moment when the SELECT-ITEM function is called.
+	** Script Error: Cannot use path on none! value
+	** Where: switch
+	** Near: if pf/picked <> face/data [old: pf/picked if old [clear skip pf/pane/:old/effect/draw 7 show pf/pane/:old] pf/picked:
+	fa...
+FIXED *table: Sorting of tables where the table column layout has onced changed fail. It looks like the changed number of columns isn't taken into account. I get the following error:
+	** Script Error: Invalid argument: 4
+	** Where: action
+	** Near: sort/skip/compare parent-face/data cols col
+FIXED *input-grid: Add a column-action / row-action (only one of them can be defined) in that we have the following actions on-unfcous:
+	- cell 			ACTION
+	- row / column 	ACTION
+	- input-grid 	ACTION
+	With only a cell action it's not possible to do some input checks for value-ranges etc. as the same value isn't applicable for all rows/columns
+	Cyphre: now you can specify action block for each column/row. For example:
+		data [
+			columns ["Montag" "Dienstag" [print "column action1"] "Mittwoch" "Donnerstag" [print "column action2"] "Freitag"]
+			rows ["1/Prod. Tage" [print "ROW action1"] "1/Prod. Std." "1/Verfügbarkeit" [print "ROW action2"] "1/Auslastung"]
+			...
+		]
+	note: The return values of column/row actions are handled the same way as in cell actions.
+FIXED *input-grid: change ctx-cells to return names in the order: 1 column, 2nd column etc. at the moment it's 1 row, 2nd row etc. The latter is harder to fill in loops.
+FIXED *input-grid: SET-CELL exits if the given PAIR is out-of-range, should throw an error or print an error message printen the PAIR value that caused the error
+FIXED *radio-group: A way to provide an ID per selection option, that can be read out and set at runtime. Background: Saving the state of a radio-group into a database must be stable WRT changing the text of selection and the order. Example:
+	rg: radio-group data [
+		2 "Option 1" 1
+			 "Option 2" 2
+			 "Option 3" 3
+	]
+	rg/selected returns text
+	rg/picked	return ID not position (Shouldn't break any existing code, only the DATA block needs to be ajusted)
+	The first integer! indicates the ID to select as default
+FIXED *group-box: If the title is wider than the group-box layout the box isn't sized wide enough, hence the title is clipped
+FIXED *chart/pie: If the data/data block is empty I get:
+	** Math Error: Attempt to divide by zero
+	** Where: switch
+	** Near: tmp2: 360 / tmp while
+FIXED *input-grid: There is a bug in the auto-cell-naming scheme. Here is my code:
+			sh: input-grid data [
+				row-title "Produktionsparameter"
+				columns [
+					"Montag"
+					"Dienstag"
+					"Mittwoch"
+					"Donnerstag"
+					"Freitag"
+					"Samstag"
+					"Sonntag"
+					label 25 "Durchschnitte"
+					label 25 "Berechnungen"
+				]
+				column-names [
+					monday
+					tuesday
+					wendsday
+					thursday
+					friday
+					saturday
+					sunday
+					average
+					sum
+				]
+				rows [
+					"Prod. d / Wochentag / a"
+					"Prod. h / d"
+					"Prod. h / Wochentag / a"
+					"Verfügbarkeit / Wochentag / a (%)"
+					"Auslastung / Wochentag / a (%)"
+				]
+				row-names [
+					pd_weekday
+					ph_day
+					ph_weekday
+					availability
+					utilization
+				]
+
+				auto-cell-naming
+				name-divider "-"
+				cell-action [
+					print ["cell action:" face/offset value]
+					true
+				]
+			]
+	And here is the sequence of cell names:
+		foreach cell remove first sh/ctx-cells [
+			?? cell
+			show-text get in sh/ctx-cells cell "1"
+		]
+	Output:
+		cell: pd_weekday-monday
+		cell: ph_day-monday
+		cell: ph_weekday-monday
+		cell: availability-monday
+		cell: utilization-monday
+		cell: none-monday
+		cell: pd_weekday-tuesday
+		cell: ph_day-tuesday
+		cell: ph_weekday-tuesday
+		cell: availability-tuesday
+		cell: utilization-tuesday
+		cell: none-tuesday
+		cell: pd_weekday-wendsday
+		cell: ph_day-wendsday
+		cell: ph_weekday-wendsday
+		cell: availability-wendsday
+		cell: utilization-wendsday
+		cell: none-wendsday
+		cell: pd_weekday-thursday
+		cell: ph_day-thursday
+		cell: ph_weekday-thursday
+		cell: availability-thursday
+		cell: utilization-thursday
+		cell: none-thursday
+		cell: pd_weekday-friday
+		cell: ph_day-friday
+		cell: ph_weekday-friday
+		cell: availability-friday
+		cell: utilization-friday
+		cell: none-friday
+FIXED *group-box: For nested group-boxs the titel is striked by the frameing line.
+FIXED *input-grid: A way that I can specify the type if cells not only on a column base but on a row base as well. For example:
+	sh: input-grid data [
+		row-title "Schichtsystem"
+		columns [
+			"Montag"
+			"Dienstag"
+			"Mittwoch"
+			"Donnerstag"
+			"Freitag"
+			"Samstag"
+			"Sonntag"
+			label "Durchschnitte"
+			label "Berechnungen"
+		]
+		rows [
+			"Prod. d / Wochentag / a"
+			"Prod. h / d"
+			LABEL "Prod. h / Wochentag"
+			"Verfügbarkeit / Wochentag"
+			"Auslastung / Wochentag"
+		]
+	]
+FIXED *input-grid: Add a type-prio ROW/COLUMN that is used if a type is given for columns AND rows and the type is different take the type prio.
+	Cyphre: now you can specify the TYPE-PRIO keyword in COLUMNS or ROWS blocks. For example:
+	sh: input-grid data [
+		row-title "Schichtsystem"
+		columns [
+			"Montag"
+			"Dienstag"
+			"Mittwoch" TYPE-PRIO
+			"Donnerstag"
+			"Freitag" TYPE-PRIO
+			"Samstag"
+			"Sonntag"
+			label "Durchschnitte"
+			label "Berechnungen"
+		]
+		rows [
+			label "Prod. d / Wochentag / a" TYPE-PRIO
+			"Prod. h / d"
+			label "Prod. h / Wochentag"
+			"Verfügbarkeit / Wochentag"
+			"Auslastung / Wochentag"
+		]
+	]
+	In this case the intersection of columns "Mittwoch" and "Freitag" with row "Prod. h / Wochentag" would use field type because of the TYPE-PRIO definitions.
+	Notice: intersection of columns "Mittwoch" and "Freitag" with row "Prod. d / Wochentag / a" remains label type as the TYPE-PRIO flags are on both row and column = same priorities.
+FIXED *tooltips: Add way to specify multi-line tooltips. Maybe we can use your richt-text approach you once showed and just display a face with the DRAWn text.
+	Cyphre: you can make a multi-line tool-tip using this method:
+		button "my button" tool-tip "Hello world^/This is a multilne^/tool-tip."
+FIXED *input-grid: I get this error. VALUE is what should be set to the grid. The definition is like this:
+			shift: input-grid data [
+				row-title "Schicht"
+				columns [
+								"Anzahl" 				center
+								"Arbeitstage"			center
+								"Arbeitszeit"			center
+						  40	"Zulage (% Grundlohn)" 	center
+					label 25 	"Zulage (€/h)"			right
+					label 25 	"Summe (€/h)"			right
+					label 40 	"Summe (€/Schicht)"		right
+				]
+				rows [(tmp: [] x: 1 loop 4 [append tmp rejoin [to-string x ". Schicht"] x: x + 1] reduce tmp)]
+				cell-action [check-input face]
+			][calc-shift]
+	value: ["10" "220" "7,5" "0" "0,00" "123,40" "925,50" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""]
+	** Script Error: set-cell expected txt argument of type: string
+	** Where: set-grid
+	** Near: set-cell as-pair c r col
+	>>
+	I think the internal format has changed.
+	Cyphre: Yes I changed the format according to your previous request(original see below): "input-grid: The get-grid/set-grid functions should return a nested block structure so that I can save/load input-grid data"
+FIXED *drop-tree: a way to select an entry at run-time. Background: If the program switches to some other form, the drop-tree needs to stay in sync.
+	Cyphre: use this API call sequence(example):
+		drop-tree/select-node "1/2/1" ;the string contains the path to the item you want to select
+		drop-tree/update
+FIXED *drop-list: editable? doesn't has any effect and hence auto-fill? doesn't work as well
+	Cyphre: the editable/autofill functionality works only aftr calling dropl-list/redraw, for example:
+		my-drop-list/editable?: true
+		my-drop-list/auto-fill?: true
+		my-drop-list/redraw
+FIXED *drop-tree: Add a way to specify a default code block that's get called if an entry without an ACTION block is selected. (see next point)
+	Cyphre: added alt-action block which can be used for the default code when node without ACTION block is selected. Example:
+		display [
+			my-dt: drop-tree 80 data (test-data) [print "Global action called!"][print "default 'EMPTY ACTION' block"]
+		]
+		note: if you dont need the 'global action' block then just supply an empty block like:
+		display [
+			dt: drop-tree 80 data (test-data) [][print "default 'EMPTY ACTION' block"]
+		]
+FIXED *drop-tree: if no action block is given, the selection of such an entry changes the input-field text. That's wrong. Nothing should happen or the default message code be called.
+FIXED *input-grid: Add a reset function that empties all data
+FIXED *chart/pie: Not specifying the title, should result in not drawing anything for the tite. At the moment a small "empty" box es drawn
+FIXED *chart/pie: An option to specify if the pie shows %-values or absolut values. The data part is always absolut values.
+	Cyphre: added keyword: SHOW-VALUES-AS percentage | absolute - absolute is default.
+FIXED *chart/pie: The drawing area should show all values, at the moment there is a cut-off.
+	I don't know how to best do it, as the values can be of different length and if we change the size of the pie, it can become jumpy.
+FIXED *input-grid: The get-grid/set-grid functions should return a nested block structure so that I can save/load input-grid data even if the layout changed.
+	In this case we load the data starting at 1x1 into the grid. If columns have been inserted not only at the end, the developer has to take care of this.
+FIXED *input-grid: set-* function should redraw the CELL or the GRID.
+	Any drawbacks if auto-redraw is implemented?
+FIXED *input-grid: cell-action should be fired on TAB as well. Return should TAB the cursor as well. Cursor should only move if cell-action returns TRUE.
+FIXED *input-grid: If cell type LABEL is used, the grid lines should be drawn. At the moment it's a plain area.
+FIXED *input-grid: Add a way that I can set the DATA block of an input-grid at runtime. Especially the ROWS and COLUMNS part. Something like:
+	my-input-grid/data: [<new block definition>]
+	my-input-grid/redraw
+FIXED *on-unfocus: Hi, this one here is nasty:
+	** Script Error: Cannot use path on none! value
+	** Where: edit-text
+	** Near: if caret/y < (edge/size/y + para/origin/y + para/indent/y) [scroll/y: round/to scroll/y - caret/y sizes/font-height]
+	I check the input format of a field to be sure it only has numbers.
+	For this I use an ON-UNFOCUS function that resets the value in this case to "0.0" and returns false.
+	Otherwise it returns true.
+	This error only happens if the wrong input is longer than the new value getting set.
+FIXED *table: The new table sort stuff:
+	** Script Error: sort expected comparator argument of type: integer block function
+	** Where: redraw
+	** Near: sort/skip/compare data arrow/cols arrow/col
+	>>
+FIXED *drop-list: Putting a drop-list in the first line of a layout with a long DATA block (example: 20 entries) tries to open drop-list upward, which fails as there is no space. drop-list doesn't open downward in this case.
+FIXED drop-list: If a drop-list has an action block, the selected value isn't shown in the drop-list field. Only if the list is clicked again.
+FIXED *table: if a sorting order is selcted and new data is loaded to the table, the sorting order isn't taken into account. Either: reset the sorting order, or apply it once again. I think putting this into the /redraw function is the right place
+FIXED *table: Header still seem to be not positioned correctly. If 'center is used the header is positioned to far left
+FIXED *drop-list: way to alter DATA and TEXT at run-time. TEXT can be set to something not contained in DATA
+FIXED *drop-list: way to pick an entry from DATA at run-time (by value or by position)
+	Cyphre: -Added drop-list/set-picked [string! | integer!] so you can set the picked item by value or pos.
+	 		-Added drop-list/set-data [block!] and drop-list/alter-data [integer!] [block!] accesors
+			-Added  drop-list/picked property so it is more consistent with other widgets.
+FIXED *general: a way to specify a reset value that will be shown if <widget>/reset is called for example:
+	Cyphre:
+		- my-drop-list/reset will show non of the drop-list entries but a default text
+		- my-field/reset can show a default text within the field
+		-globally added my-widget/RESET method call
+		-added optional my-widget/RESET-ACTION function so if any widget spec can have this set to some default operation
+		-added ON-RESET keyword in layout so you can easily write for example
+			display [
+				my-drop-list: drop-list "test" data ["a" "b" "c"] on-reset [face/set-picked "default text"]
+			]
+		or something like:
+			reset-dl: [face/set-picked "default text"]
+			display [
+				my-drop-list: drop-list "test" data ["a" "b" "c"] on-reset reset-dl
+			]
+		ofcourse, my-drop-list/reset would call the function block defined above.
+		note: Robert, currently any of the widget don't have any default reset-action defined so you need to use own specification. If you have any idea for some default actions for each widget just let me know.
+FIXED *general: when tabbing through fields & area, for fields the text is preselected, for area it isn't, should be the same for area
+FIXED *layout-box: like group-box but without any visible stuff to be used to create column like layouts and for better placing widgets (better name might be possible)
+	Cyphre: added PANEL widget which works as you described.
+FIXED *table: Using tbl2/set-columns ["ID" center 0.25 "Bezeichnung" left 0.75] results in:
+	** Script Error: Cannot use add on none! value
+	** Where: set-columns
+	** Near: widths/:cols: widths/:cols + size/x -
+	This one seems to happen only, if the number of columns in the table doesn't change and only the labels and widths are changed
+FIXED *drop-list: if the drop-list opens upward, the upper arrow is shifted out of view
+FIXED *drop-tree: if a user has selected an entry position the tree that the selected entry is the second line if the drop-tree is opened again (to reduce mouse movement)
+FIXED *table: my-table/select-row should fire table action if present to act like a user-selection
+FIXED *table: If a row is selected and the selection is moved with the cursor out of the visible lines, the table isn't scrolled
+FIXED *table: Add my-table/add-row [value block!]
+FIXED *table: Add my-table/remove-row INTEGER
+	Cyphre: added REMOVE-ROW row [integer! block!] - if block! of integers is specified the function remove all appropriate rows
+	at once so you can supply multiple row selection using my-table/picked directly to the function.
+	NOTE: I also enhanced SELECT-ROW so it can take block of multiple row numbers for selection.
+	Example:
+		my-table/remove-row 1
+		my-table/remove-row [4 2 6]
+FIXED *table: Add my-table/alter-row INTEGER [value block]
+	my-table/selected return a block of INTEGER for selected rows. Shoudl we support block for my-table/alter-row as well?
+	Cyphre: added ALTER-ROW row [integer! block!] values [block!]
+	If multiple rows in block are specified then values block have to contain multiple nested block of values for each row.
+	Example:
+		my-table/alter-row 1 ["a" "b" "c"]
+		my-table/alter-row [1 3 5][["a" "b" "c"] ["x" "y" "z"] [1 2 3]]
+FIXED *table: if the table is sorted while a line is picked, the picked line isn't kept on the selected entry and a "clicked" action isn't fired. This leads to an inconsistent state between GUI and internal app state. Picked line should follow the move and internal state like /picked should be updated to refelect changed state.
+FIXED *drop-tree: closing works not, if the drop-tree is open and I select an entry in a table, clicking outside of any widget closes the drop-tree
+FIXED *drop-tree: clicking on the text still opens/closes the node. Should only open, closing is only done by clicking on +/-
+FIXED *drop-list: mode that will set the width of the drop-down list so that all entries will fit, even if the drop-list field is smaller
+	Cyhpre: added drop-list/resize-list? flag (default is FALSE). If set to true it sets the list width according to the longest entry.
+FIXED *input-grid: A widget that can be used to get input from the user in a grid-form. (see users/cyphre/input-grid for an example)
+	- has headers for the different columns
+	- has descriptions for the different rows (on the left side)
+	- Counting starts at 1x1 for the non-header cells, header/description cells have index 0x... and ...x0
+	- columns can have different types like FIELD, LABEL
+	- each cell should be accessible through a PAIR key: input-grid/2x3 would be perfect (like the image! datatype)
+	- optional auto cell-naming function to give every cell a unique but pattern based name that can be used as word within the code
+	- each column gets a name
+	- each row is just numbered
+	- generated words should be possible to be "autoadded" to a context at a specific starting position
+			context mine [
+				... 10 other words ...
+				input-grid words
+				... 10 other words ...
+			]
+	- Example naming scheme: Name1, Name2, Name3, Age1, Age2, Age3
+			input-gid columns ["Name" "Age"] rows ["1st place" "2nd place" "3rd place"]
+			show-text Name1 "Cyphre"
+			input-grid/set 1x1 "Cyphre"
+	- a way to save/load input-grid data from/to the grid
+	- a way to specify default values either by column or by row (should set TEXT to visual representation and DATA to number/decimal)
+	- a way to specify the width/height at runtime. This is when the users makes selections like: I need one XYZ more.
+
+	Cyphre:
+	DATA block usage:
+	You have to specify all options in DATA block. The DATA block can contain:
+		row-title 			string! 		- this is the text in cell 0x0 with optional text align (center | left | right)
+		columns 			block! or word! - block of the column header texts and column types(optional) and column widths(optional) text align center | left | right (optional).
+		 										For example
+		 										[label "column1" field "column2" 50] etc.
+		 										If you don't specify the type it will use default FIELD type.
+		 										If you don't specify the column width the default value of 22 units is used.
+		rows 				block! or word! - block of rows description texts and text align (center | left | right - optional)
+		values 				block! or word! - block of text values for all cells in the grid.
+		auto-cell-naming 					- generates a context with words bounds to each cell. The word pattern is 'cell11 'cell12 'cell13 etc.
+		row-names 			block! 			- specifies name part which is used for construction of cell names
+		cell-names 			block! 			- specifies name part which is used for construction of cell names
+		name-divider 		string! 		- specifies part which is used for division of row-names and column-names parts
+		cell-action 		block! 			- specifies code which is called when user presses enter key in any of the cell in grid
+	Widget accessors:
+		SET-CELL 	pair! string! 	- using this method you can set any cell in the grid. Example: my-grid/set-cell 1x1 "test"
+		GET-CELL 	pair! 			- using this method you can get any cell in the grid. Example: my-grid/get-cell 1x1  result = "test"
+		SET-GRID 	block! 			- using this method you can set the content of grid cells providing block of string values per each cell.
+		GET-GRID 					- using this method you can get the content of grid cells. It returns block of string values per each cell.
+		MAKE-CELL-NAMES row-names column-names name-divider - this method will create my-grid/ctx-cells context which contains generated words refering to each cell. (this is invoked also when you specify auto-cell-naming keyword in the DATA block). The word pattern is generated using the row-names + divider + column-names etc. so you can access the cells like:
+				my-grid/make-cell-names [team lead] [name city] "_"
+				show-text my-grid/ctx-cells/team_name "New text"
+			or
+				do bind [probe  lead_city/text] in my-grid/ctx-cells 'self
+		GET-CELL-NAMES 				- returns a block of cell words ('cell11 'cell12 'cell13 etc.) which are bound to each cell in the grid. So you can do for example:
+			>>cell-names: my-grid/get-cell-names
+			>>cell-names/1
+			==cell11
+			>>show-text get cell-names/1 "Test"
+	You can also specify global action for the whole grid placing standard action block when defining the layout.(see example below)
+
+	The input-grid usage example:
+		demo-values: copy []
+
+		repeat n 4 * 8 [
+			insert demo-values form (random 100) / 10
+		]
+
+		display "test" [
+			ig: input-grid data [
+				row-title "Schicht"
+				columns ["Montag" "Dienstag" "Mittwoch" "Donnerstag" "Freitag" "Samstag" "Sonntag" label "Summen"]
+				rows ["1/Prod. Tage" "1/Prod. Std." "1/Verfügbarkeit" "1/Auslastung"]
+				values demo-values
+				auto-cell-naming
+				row-names [montag dienstag mittwoch donnerstag freitag samstag sonntag summen]
+				column-names [a b c d]
+				name-divider "-"
+				cell-action [print ["cell action:" face/offset value]]
+			][print "input grid global action"]
+		]
+FIXED *rebgui/pad: Now only works for horizontal padding. Padding should happen depending on the layout direction left-to-right or top-to-down.
+	Cyphre: now PAD works according to the AFTER settigns. Example:
+	display "Test" [
+		after 3
+	    field
+		pad 5
+	    field
+	    pad 5
+	    field
+	    pad 5
+	    field
+	    pad 5
+	    field
+	    pad 5
+	    field
+	]
+	Robert,let me know if it works like you wanted.
+FIXED *group-box: When setting a new title group-box/text: "new-title" the surounding frame needs to be adjusted to the new text-width.
+FIXED *drop-tree: When selecting different quick-access buttons directly one after the other, the drop-tree shouldn't close
+FIXED *drop-tree: Highlighting the pressed quick-access button with green, the hovered one as is in orange. To give user visial feedback.
+FIXED *general: a way to sepcify "align ['left]" for all further widgets to avoide repeation. Idea: Add disaply keywords: left, right, center
+	Cyphre: added keyword TEXT-ALIGN left/right/center. Example:
+	display "Test" [
+		text-align right
+		after 3
+	    t: text 20 "test 1"
+	    field "test 2"
+	    field "test 3"
+	    text-align left
+	    field "test 4"
+	    field "test 5"
+	    field "test 6"
+	]
+FIXED *drop-list: an option that will show the list layered above everything (like the tree list of drop-tree).
+	Cyphre: added drop-list/popup-mode: 'inside(default) or 'outside
+	note: the same works for drop-tree
+FIXED *drop-tree: changing state of the drop-tree (a new entry was selected) should only be done if the ACTION code returns TRUE. Otherwise the old state is kept, the drop-tree is closed and nothing happens. This allows the code to check for some pre-conditions before changing the state, and give some feedback to the user. Much like the on-unfocus functionality of RebGUI.
+FIXED *drop-tree: pressing the quick-access numbers doesn't work any more as the drop-tree closes now if the mouse is clicked outside the drop-tree
+FIXED *table: table/selected returns NONE if the table is empty and no record is selected. If there was one recrod selected at any time, than table/selected returns [none none <repeated for number of columns>]. If not row is selected at any time, table/selected should just return NONE.
+FIXED *table: If a table is re-used in that the table is reused with code like:
+	insert clear table/data [...]
+	people/redraw
+and there was a row selected before, than the internal state is still in "row selected" but the new row isn't highlighted. Here internal state and GUI don't match.
+FIXED *drop-tree: clicking a "+/-" in the tree only open/closes the tree without calling the action for the node
+FIXED *drop-tree: Re-add whole line selection and hovering functionality (so that mouse does not have to be over text)
+FIXED *drop-tree: Add an option to get big fast-selction keys aligned left-to-right
+	Cyphre: added drop-tree/expander-mode: 'big(default) or 'small
+FIXED *button: Add an option to disable a button my-button/active: true/false, if disabled the button is drawn greyed-out
+	Cyphre: usage is my-button/active: true/false show my-button
+FIXED *field: Support number datatypes for TEXT so that things like field-a/text + field-b/text can be used
+	Cyphre: you need to set field/edit-mode: 'numbers to activate this behaviour for field(othervise it works like a normal field)
+	2nd implementation uses own styel: number-field
+FIXED *radio-group: Add an API that allows to provide a new DATA specification block at runtime or a way to alter the text of the radio fields at runtime.
+	Cyphre: now you can just change the data content and do show on the radio-group like:
+		my-radio-group/data: ["item1" "item2" "item3" "item4"]
+		show my-radio-group
+	Note that it won't react on change of number of items. Just change of texts.
+FIXED *radio-group: Add a way to select one radio field at run-time
+	added accesor select-item item [integer!] usage:
+		my-radio-group/select-item 2
+		show my-radio-group
+	note: you can get the selected item using my-radio-group/picked, you can get the text of selected item using my-radio-group/selected
+FIXED *drop-tree/grey-out: Can it be done in that we only show the text in a light grey instead of black? Like Windows does it.
+	Cyphre: now the masked text is light grey
+FIXED *on-focus / on-unfocus: If FALSE is return from the ACTION and the user clicked somewhere on the screen, the focus is still in the "field" but no cursor bar is visible
+FIXED *drop-list: IIRC in your widgets it was possible to start typing and the selection list was filtered. A mandatory feature for the drop-list :-))
+	Cyphre: added drop-list/editable? flag to enable/disable editing of the drop-list field
+	also added drop-list/auto-fill? flag which enables automatic text filterin from the selection list
+FIXED *general: add hover tooltip help option to every widget (global patch)
+	Cyphre: added TOOL-TIP facet to rebface object. If TOOL-TIP is set to string! value a tooltip is shown when mouseover such widget.
+	example:
+		display "test" [
+			button "press me" tool-tip "press this button to continue"
+		]
+FIXED*drop-list: proivde a much better selection-list opening algorithm especially for long lists. Open upward, downward, middle like so that as much entries are shown for the given screen space. And an option that will show the list layered above everything (like the tree list of drop-tree).
+	Cyphre:
+	-added drop-list/lines - can be 'auto (default) or integer! to force number of shown lines in droplist
+	-added drop-list/droplist-mode - can be 'auto (default) 'upward, 'downward or 'middle to force way how the list is popped up
+	you can use various combination of those settings.
+FIXED*table: Add an API that allows to select a row at run-time.
+	Cyphre: Usage is for example:
+		my-table/select-row 5
+		show my-table
+FIXED*table: Add an API to table that allows to change the columns layout at runtime: my-table/reset ["Column 1" left 0.25 "Column2" center 0.75]
+	Cyphre: I added the functionality byt the API call is my-table/set-columns ["Column 1" left 0.25 "Column2" center 0.75]
+FIXED*drop-list: fire action only if selection was made/changed, at the moment action fires if clicked on field too
+FIXED*general: on-un/focus should be fired if user clicks an other widget, not only if carets leaves the widget when TAB is pressed
+FIXED*table: moving bar up/down with keyboard should fire click-action, alternativ: pressing RETURN can fire click action
+FIXED*table: align header text like data (left, center, right) at the moment always left
+FIXED*table: TRAC #21
+FiXED*TRAC #5 Cyphre: should be fixed but please test it and let me know.
+FIXED*TRAC #6...
